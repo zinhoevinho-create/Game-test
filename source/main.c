@@ -471,6 +471,11 @@ int main(int argc, char* argv[]) {
         pspDebugScreenPrintf("JUMP QUEST  Fase %d/%d  Pontos: %d  Vidas: %d",
             currentLevel + 1, MAX_LEVELS, score, lives);
 
+        /* DEBUG: remover depois de confirmar que o bug sumiu */
+        pspDebugScreenSetXY(1, 2);
+        pspDebugScreenPrintf("DEBUG plataformas=%d playerY=%.1f onGround=%d",
+            levels[currentLevel].numPlatforms, player.y, player.onGround);
+
         if (paused) {
             pspDebugScreenSetXY(1, 3);
             pspDebugScreenPrintf("PAUSADO - START para continuar");
@@ -491,4 +496,3 @@ int main(int argc, char* argv[]) {
     sceKernelExitGame();
     return 0;
 }
-
