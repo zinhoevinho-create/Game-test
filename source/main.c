@@ -462,6 +462,8 @@ int main(int argc, char* argv[]) {
         }
 
         sceGuStart(GU_DIRECT, list);
+        sceGuClearColor(COLOR_SKY);
+        sceGuClear(GU_COLOR_BUFFER_BIT);
         render_level();
         sceGuFinish();
         sceGuSync(0, 0);
