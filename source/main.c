@@ -61,16 +61,19 @@ typedef struct { unsigned int color; float x, y, z; } Vertex;
 static unsigned int __attribute__((aligned(16))) list[262144];
 
 void draw_rect(float x, float y, float w, float h, unsigned int color) {
-    Vertex* vertices = (Vertex*)sceGuGetMemory(2 * sizeof(Vertex));
-    vertices[0].color = color;
-    vertices[0].x = x;     vertices[0].y = y;     vertices[0].z = 0;
-    vertices[1].color = color;
-    vertices[1].x = x + w; vertices[1].y = y + h; vertices[1].z = 0;
+    /* 4 vertices explicitos formando um quad (triangle strip), em vez da
+       primitiva GU_SPRITES (mais suscetivel a diferencas entre drivers). */
+    Vertex* vertices = (Vertex*)sceGuGetMemory(4 * sizeof(Vertex));
+
+    vertices[0].color = color; vertices[0].x = x;     vertices[0].y = y;     vertices[0].z = 0;
+    vertices[1].color = color; vertices[1].x = x + w; vertices[1].y = y;     vertices[1].z = 0;
+    vertices[2].color = color; vertices[2].x = x;     vertices[2].y = y + h; vertices[2].z = 0;
+    vertices[3].color = color; vertices[3].x = x + w; vertices[3].y = y + h; vertices[3].z = 0;
 
     sceGuDisable(GU_TEXTURE_2D);
-    sceGumDrawArray(GU_SPRITES,
+    sceGumDrawArray(GU_TRIANGLE_STRIP,
         GU_COLOR_8888 | GU_VERTEX_32BITF | GU_TRANSFORM_2D,
-        2, 0, vertices);
+        4, 0, vertices);
 }
 
 /* ---------------------------------------------------------------- */
